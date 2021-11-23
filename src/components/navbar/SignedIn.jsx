@@ -2,12 +2,12 @@ import React from "react";
 import styled from "styled-components";
 import { BsCart4 } from "react-icons/bs";
 
-import { Link } from "react-router-dom";
-
+import { Link, useLocation } from "react-router-dom";
 
 const SignedIn = (props) => {
+  const location = useLocation();
   // props.signOut()
-  const { toggle } = props;
+  const { toggle, totalItems } = props;
   return (
     <Links className={toggle ? "active" : ""}>
       <LinkItem>
@@ -20,11 +20,15 @@ const SignedIn = (props) => {
         <Link to="/signIn">Account</Link>
       </LinkItem>
 
-      <LinkItem>
-        <Link to="/cart" className="cart">
-          <BsCart4/>
-        </Link>
-      </LinkItem>
+      {location.pathname !== "/cart" && (
+        <LinkItem>
+          <Link to="/cart" className="cart">
+            {totalItems >=0 && <div className="count">{totalItems}</div>}
+
+            <BsCart4 />
+          </Link>
+        </LinkItem>
+      )}
     </Links>
   );
 };
@@ -81,6 +85,22 @@ const LinkItem = styled.li`
     justify-content: center;
     align-items: center;
     border-radius: 50px;
+    position: relative;
+
+    .count {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      background: red;
+      border-radius: 50px;
+      z-index: 3;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 25px;
+      height: 25px;
+    }
   }
 
   @media (max-width: 900px) {

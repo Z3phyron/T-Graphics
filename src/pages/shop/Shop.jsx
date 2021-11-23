@@ -2,11 +2,14 @@ import React from 'react'
 import styled from"styled-components"
 import ProductList from '../../components/product/ProductList';
 
-const Shop = () => {
+const Shop = (props) => {
+  
+const { products, onAddToCart } = props;
+
     return (
         <Cont>
             <h3 className="heading">Shop</h3>
-            <ProductList/>
+        <ProductList products={products} onAddToCart={ onAddToCart }/>
         </Cont>
     )
 }

@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import showcase from "../../images/showcase.png"
 
 const Showcase = () => {
   return (
@@ -12,7 +13,7 @@ const Showcase = () => {
         </p>
       </Text>
       <Image>
-        <p>image</p>
+        <p><img src={showcase} alt="" /></p>
       </Image>
     </Cont>
   );
@@ -22,7 +23,7 @@ const Cont = styled.div`
   display: grid;
   grid-template-columns: 50% auto;
   align-items: center;
-  height: 50vh;
+  height: auto;
   padding: 2%;
   border-radius: 10px;
   background: var(--Color-2);
@@ -77,6 +78,11 @@ const Image = styled.div`
   justify-content: center;
   align-items: center;
   text-align: center;
+
+  img {
+    width: 80%;
+    margin: auto;
+  }
   
 
   @media (max-width: 700px) {

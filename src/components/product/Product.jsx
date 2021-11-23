@@ -2,20 +2,22 @@ import React from "react";
 import { CgShoppingBag } from "react-icons/cg";
 import styled from "styled-components";
 
-const Product = ({product}) => {
+const Product = (props) => {
+
+  const {product, onAddToCart} = props
 
 
 
   return (
     <Cont>
-      <Image><img src={product.image.url} alt={product.name} /></Image>
+      <Image><img src={props.product.image.url} alt={props.product.name} /></Image>
       <Details>
         <div className="product_info">
-          <h4 className="name">{ product.name}</h4>
-          <span className="price">{ product.price.formatted_with_symbol}</span>
+          <h4 className="name">{ props.product.name}</h4>
+          <span className="price">{ props.product.price.formatted_with_symbol}</span>
         </div>
-        <button className="cart_btn">
-          <CgShoppingBag />
+        <button className="cart_btn" onClick={() => onAddToCart(product.id, 1) }>
+          <CgShoppingBag/>
         </button>
       </Details>
     </Cont>

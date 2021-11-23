@@ -2,20 +2,28 @@ import React from "react";
 import styled from "styled-components";
 import { CgClose } from "react-icons/cg";
 
-const CartItem = () => {
+const CartItem = (props) => {
+  const { item, onUpdateQty, onRemove } = props;
     return (
       <Cont>
-        <Remove>
-          <CgClose/>
-          </Remove>
-        <Image></Image>
+        <Remove onClick={() => onRemove(item.id)}>
+          <CgClose />
+        </Remove>
+        <Image>
+          <img src={item.image.url} alt={item.name} />
+        </Image>
         <Details>
           <div className="product_info">
-            <h4 className="name">product name</h4>
-            <span className="price">$00.0</span>
+            <h4 className="name">{item.name}</h4>
+            <span className="price">{item.price.formatted_with_symbol}</span>
           </div>
-          
         </Details>
+        <Buttons>
+          <button className="decr" onClick={() => onUpdateQty(item.id, item.quantity - 1)}>-</button>
+          <div className="qty">{item.quantity}</div>
+          <button className="incr" onClick={() => onUpdateQty(item.id, item.quantity + 1)}>+</button>
+        </Buttons>
+        
       </Cont>
     );
 };
@@ -119,6 +127,40 @@ const Details = styled.div`
     color: var(--Color-2);
   }
 `;
+
+const Buttons = styled.div`
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 20px;
+font-size: 16px;
+
+button {
+  width: 30px;
+  height: 30px;
+  outline: none;
+  border: none;
+  border-radius: 4px;
+  background: var(--Color-4);
+}
+`;
+
+// const Button = styled.div`
+// display: flex;
+// justify-content: space-between;
+// align-items: center;
+// padding: 20px;
+// font-size: 16px;
+
+// button {
+//   width: 30px;
+//   height: 30px;
+//   outline: none;
+//   border: none;
+//   border-radius: 7px;
+//   background: var(--Color-4);
+// }
+// `;
 
 
 export default CartItem;

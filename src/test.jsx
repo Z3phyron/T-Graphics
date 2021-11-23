@@ -1,1 +1,1 @@
-// layout component
+// reusable product component

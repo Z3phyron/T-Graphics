@@ -5,8 +5,10 @@ import { CgClose, CgMenuMotion } from "react-icons/cg";
 // import SignedOut from "./SignedOut";
 import SignedIn from "./SignedIn";
 
-const Navbar = () => {
+const Navbar = (props) => {
   const [navbar, setNavbar] = useState(false);
+
+  const { totalItems } = props;
 
   const changeBackground = () => {
     if (window.scrollY >= 50) {
@@ -30,7 +32,7 @@ const Navbar = () => {
       </Logo>
 
       {/* <SignedOut toggle={toggle} /> */}
-      <SignedIn toggle={toggle}/>
+      <SignedIn toggle={toggle} totalItems={ totalItems }/>
 
       <Toggle onClick={handleToggle}>
         {toggle ? <CgClose /> : <CgMenuMotion />}

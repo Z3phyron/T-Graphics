@@ -2,11 +2,11 @@ import React from 'react'
 import styled from "styled-components";
 import Product from './Product';
 
-const ProductList = ({products}) => {
+const ProductList = (props) => {
     return (
       <Cont>
-        {products && products.map((product) => (
-          <Product product={product} key={ product.id }/>
+        {props.products && props.products.map((product) => (
+          <Product product={product} key={product.id} onAddToCart={props.onAddToCart}/>
         ))}
 
            
