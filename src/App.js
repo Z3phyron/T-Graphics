@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route} from "react-router-dom";
 import Navbar from "./components/navbar/Navbar";
 import Home from "./pages/home/Home";
 import styled from "styled-components";
@@ -9,8 +9,8 @@ import Contact from "./pages/Contact/Contact";
 import SignUp from "./pages/auth/SignUp";
 import SignIn from "./pages/auth/SignIn";
 import Cart from "./pages/cart/Cart";
-
 import { commerce } from "./lib/Commerce";
+
 
 function App() {
   const [products, setProducts] = useState([]);
@@ -69,6 +69,7 @@ function App() {
     </div>
   );
 }
+
 
 const Cont = styled.div`
   padding-top: 15vh;

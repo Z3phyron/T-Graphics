@@ -3,32 +3,78 @@ import styled from "styled-components";
 import { BsCart4 } from "react-icons/bs";
 
 import { Link, useLocation } from "react-router-dom";
+import { Avatar } from "@mui/material";
+import { useAuth } from "../../contexts/AuthContext";
+
+
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import Fade from "@mui/material/Fade";
 
 const SignedIn = (props) => {
+  const { logout, currentUser } = useAuth();
+
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const open = Boolean(anchorEl);
+    const handleClick = (event) => {
+      setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+      setAnchorEl(null);
+    };
+  console.log(currentUser)
   const location = useLocation();
   // props.signOut()
   const { toggle, totalItems } = props;
   return (
     <Links className={toggle ? "active" : ""}>
-      <LinkItem>
+      <div className="overlay">
+
+      </div>
+      <LinkItem >
         <Link to="/shop">Shop</Link>
       </LinkItem>
-      <LinkItem>
+      <LinkItem >
         <Link to="/contact">Contact</Link>
       </LinkItem>
+
       <LinkItem>
-        <Link to="/signIn">Account</Link>
+        <Avatar onClick={handleClick} sx={{ width: 32, height: 32 }}>
+          {currentUser.auth.currentUser.displayName}
+        </Avatar>
+        <Menu
+          id="fade-menu"
+          MenuListProps={{
+            "aria-labelledby": "fade-button",
+          }}
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          TransitionComponent={Fade}
+        >
+          <MenuItem onClick={handleClose}>Profile</MenuItem>
+          <MenuItem onClick={handleClose}>My account</MenuItem>
+          <MenuItem onClick={handleClose}>Logout</MenuItem>
+        </Menu>
       </LinkItem>
 
       {location.pathname !== "/cart" && (
         <LinkItem>
           <Link to="/cart" className="cart">
-            {totalItems >=0 && <div className="count">{totalItems}</div>}
-
+            {totalItems >= 0 && <div className="count">{totalItems}</div>}
             <BsCart4 />
           </Link>
         </LinkItem>
       )}
+      <LinkItem
+        name="Logout"
+        onClick={async (e) => {
+          e.preventDefault();
+          await logout();
+        }}
+      >
+        SignOut
+      </LinkItem>
     </Links>
   );
 };
@@ -43,6 +89,15 @@ const Links = styled.ul`
     background: var(--c1);
     color: var(--c);
     transition: all 2s;
+
+    /* .overlay {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      left: 0;
+      top: 0;
+      background: var(--Color-5);
+    } */
 
     &.active {
       display: block;

@@ -1,30 +1,85 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, Navigate } from "react-router-dom";
 import styled from "styled-components";
+import { useAuth } from "../../contexts/AuthContext";
+
+import { useToasts } from "react-toast-notifications";
 
 const SignIn = () => {
+  const { addToast } = useToasts();
+
+  const { signInWithGoogle, login, currentUser } = useAuth();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  if (currentUser?.uid) return <Navigate to="/" />;
   return (
     <Cont>
       <h3 className="heading">Sign In</h3>
 
       <Wrapper>
-        <Form>
+        <Form
+          onSubmit={async (e) => {
+            e.preventDefault();
+
+            // your login logic here
+            // setIsSubmitting(true);
+            login(email, password)
+              .then((res) => {
+                if (res.user.email) {
+                  addToast("Welcome " + res.user.email, {
+                    appearance: "success",
+                  });
+                }
+              })
+              .catch((error) => {
+                console.log(error.message);
+                if (
+                  error.message === "Firebase: Error (auth/wrong-password)."
+                ) {
+                  addToast("Invalid Password", { appearance: "error" });
+                } else if (
+                  error.message === "Firebase: Error (auth/user-not-found)."
+                ) {
+                  addToast("User not found", { appearance: "error" });
+                } else {
+                  addToast("Welcome Back", { appearance: "success" });
+                }
+              });
+          }}
+        >
           <FormControl>
             <InputField>
-              <Input type="email" placeholder="Email..." required />
+              <Input
+                name="email"
+                type="email"
+                autoComplete="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email..."
+              />
             </InputField>
           </FormControl>
           <FormControl>
             <InputField>
-              <Input type="password" placeholder="Password....." required />
+              <Input
+                name="confirmPassword"
+                type="password"
+                value={password}
+                required
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Password....."
+              />
               {/* <small>Forgot PassWord?</small> */}
             </InputField>
           </FormControl>
           <InputField>
             <button type="submit">Sign In</button>
-
           </InputField>
-          <p>Don't have an account? <Link to='/signup'>Sign Up</Link></p>
+          <p>
+            Don't have an account? <Link to="/signup">Sign Up</Link>
+          </p>
         </Form>
 
         <Divider>
@@ -36,7 +91,23 @@ const SignIn = () => {
             <button className="social">Facebook</button>
           </InputField>
           <InputField>
-            <button className="social">Google</button>
+            <button
+              className="social"
+              onClick={() =>
+                signInWithGoogle()
+                  .then((user) => {
+                    if (user.user.email) {
+                      addToast("Welcome " + user.user.email, {
+                        appearance: "success",
+                      });
+                    }
+                    // console.log(user);
+                  })
+                  .catch((e) => console.log(e.message))
+              }
+            >
+              Google
+            </button>
           </InputField>
           <InputField>
             <button className="social">Twitter</button>
@@ -84,8 +155,6 @@ const FormControl = styled.div`
 const InputField = styled.div`
   width: 100%;
 
-
-
   button {
     /* margin: auto; */
     width: 100%;
@@ -94,7 +163,7 @@ const InputField = styled.div`
     border-radius: 5px;
     outline: none;
     border: none;
-    transition: .7s;
+    transition: 0.7s;
 
     &:hover {
       background: var(--Color-6);

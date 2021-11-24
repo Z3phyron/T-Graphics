@@ -1,11 +1,20 @@
 import React from "react";
+import { Navigate } from "react-router-dom";
 import styled from "styled-components";
+import { useAuth } from "../../contexts/AuthContext";
 import CartItem from "../../components/cartItems/CartItem";
+import Box from '@mui/material/Box';
+
+import CircularProgress from "@mui/material/CircularProgress";
 
 const Cart = (props) => {
-
+ const {  currentUser } = useAuth();
   const { cart, handleUpdateCartQty, handleRemoveFromCart, handleEmptyCart } = props;
   // const isEmpty = !cart.line_items.length;
+
+  const user = currentUser?.uid
+
+   if (!user) return <Navigate to="/signin" />;
 
   const EmptyCart = () => (
     <p className="desc">
@@ -32,18 +41,33 @@ const Cart = (props) => {
     </div>
   );
 
-  if(!cart.line_items) return "Loading......"
+  if (!cart.line_items) return (
+    <Box sx={{ display: "flex" }}>
+      <CircularProgress />
+    </Box>
+  );
 
   return (
     <Cont>
       <h3 className="heading">Your Shopping Cart</h3>
-      { !cart.line_items.length ? <EmptyCart/> : <FilledCart/>}
+      <div className="container">
+        { !cart.line_items.length ? <EmptyCart/> : <FilledCart/>}
+      </div>
+      
     </Cont>
   );
 };
 
 const Cont = styled.div`
-  padding: 8%;
+  padding: 0 8%;
+
+  .container {
+    padding: 10vh 0;
+
+    .desc {
+      text-align: center;
+    }
+  }
 
  .sub_total {
       display: flex;

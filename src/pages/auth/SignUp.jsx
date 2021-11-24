@@ -1,38 +1,118 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, {  useState } from "react";
+import { Link, Navigate } from "react-router-dom";
 import styled from "styled-components";
+import { useAuth } from "../../contexts/AuthContext";
+import { setDoc, doc } from "firebase/firestore";
+
+import { db } from "../../utils/init-firebase";
 
 const SignUp = () => {
+  // const history = useHistory();
+  const { signInWithGoogle, register, currentUser } = useAuth();
+  const [email, setEmail] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+
+ if (currentUser?.uid) return <Navigate to="/" />;
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    register(email, password)
+      .then( async(res) => {
+        const uid = res.user.uid;
+
+      
+
+      //  console.log("res", res);
+         await setDoc(doc(db, "users", uid), {
+          displayName: firstName[0] + lastName[0],
+          firstName: firstName,
+          laststName: lastName,
+          Email: email,
+          phone: phone,
+        });
+        
+      })
+      .catch((error) => {
+        console.log(error.message);
+        // toast({
+        //   description: error.message,
+        //   status: "error",
+        //   duration: 9000,
+        //   isClosable: true,
+        // });
+      });
+  };
+
   return (
     <Cont>
       <h3 className="heading">Sign Up</h3>
 
       <Wrapper>
-        <Form>
+        <Form onSubmit={onSubmit}>
           <FormControl>
             <InputField>
-              <Input type="text" placeholder="First Name..." required />
+              <Input
+                type="text"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                placeholder="First Name..."
+                required
+              />
             </InputField>
             <InputField>
-              <Input type="text" placeholder="Last Name..." required />
+              <Input
+                type="text"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                placeholder="Last Name..."
+                required
+              />
             </InputField>
           </FormControl>
           <FormControl>
             <InputField>
-              <Input type="email" placeholder="Email..." required />
+              <Input
+                name="email"
+                type="email"
+                autoComplete="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email..."
+              />
             </InputField>
             <InputField>
-              <Input type="tel" placeholder="Phone..." required />
+              <Input
+                type="tel"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="Phone..."
+                required
+              />
             </InputField>
           </FormControl>
           <FormControl>
             <InputField>
-              <Input type="password" placeholder="Password....." required />
+              <Input
+                name="password"
+                type="password"
+                autoComplete="password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Password....."
+              />
             </InputField>
             <InputField>
               <Input
                 type="password"
                 placeholder="Confirm Password....."
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
                 required
               />
             </InputField>
@@ -54,7 +134,16 @@ const SignUp = () => {
             <button className="social">Facebook</button>
           </InputField>
           <InputField>
-            <button className="social">Google</button>
+            <button
+              className="social"
+              onClick={() =>
+                signInWithGoogle()
+                  .then((user) => console.log(user))
+                  .catch((e) => console.log(e.message))
+              }
+            >
+              Google
+            </button>
           </InputField>
           <InputField>
             <button className="social">Twitter</button>

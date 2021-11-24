@@ -37,6 +37,11 @@ const Cont = styled.div`
   background: #000;
   color: var(--Color-1);
   padding: 5% 8%;
+  
+ margin-bottom: -200px;
+  /* left: 0;
+  bottom: 0;
+  width: 100%; */
 
   @media (max-width: 500px) {
     grid-template-columns: repeat(1, 1fr);

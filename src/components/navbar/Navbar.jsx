@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { CgClose, CgMenuMotion } from "react-icons/cg";
-// import SignedOut from "./SignedOut";
+import SignedOut from "./SignedOut";
 import SignedIn from "./SignedIn";
+import { useAuth } from "../../contexts/AuthContext";
 
 const Navbar = (props) => {
+  const { currentUser } = useAuth();
   const [navbar, setNavbar] = useState(false);
 
   const { totalItems } = props;
@@ -31,8 +33,9 @@ const Navbar = (props) => {
         <Link to="/">T-Graphics</Link>
       </Logo>
 
-      {/* <SignedOut toggle={toggle} /> */}
-      <SignedIn toggle={toggle} totalItems={ totalItems }/>
+      {currentUser ? <SignedIn toggle={toggle} totalItems={ totalItems }/> :  <SignedOut toggle={toggle} />}
+     
+      
 
       <Toggle onClick={handleToggle}>
         {toggle ? <CgClose /> : <CgMenuMotion />}
