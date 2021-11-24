@@ -30,6 +30,7 @@ const Cont = styled.div`
 
   @media (max-width: 500px) {
    border-radius: 0;
+   padding: 100px 0;
    grid-template-columns: 100%;
   }
 `;
