@@ -1,9 +1,10 @@
 import React from "react";
-import { Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import styled from "styled-components";
 import { useAuth } from "../../contexts/AuthContext";
 import CartItem from "../../components/cartItems/CartItem";
 import Box from '@mui/material/Box';
+
 
 import CircularProgress from "@mui/material/CircularProgress";
 
@@ -27,15 +28,30 @@ const Cart = (props) => {
     <div>
       <div className="cart_items">
         {cart.line_items &&
-          cart.line_items.map((item) => <CartItem item={item} key={item.id} onUpdateQty={handleUpdateCartQty} onRemove={handleRemoveFromCart} onEmpty={ handleEmptyCart}/>
-          )}
+          cart.line_items.map((item) => (
+            <CartItem
+              item={item}
+              key={item.id}
+              onUpdateQty={handleUpdateCartQty}
+              onRemove={handleRemoveFromCart}
+              onEmpty={handleEmptyCart}
+            />
+          ))}
       </div>
 
       <div className="sub_total">
-        <h3 className="total">Subtotal: { cart.subtotal.formatted_with_symbol}</h3>
+        <h3 className="total">
+          Subtotal: {cart.subtotal.formatted_with_symbol}
+        </h3>
         <div className="btn_group">
-          <button className="empty" onClick={handleEmptyCart}>Empty Cart</button>
-          <button className="checkout">Checkout</button>
+          <button className="empty" onClick={handleEmptyCart}>
+            Empty Cart
+          </button>
+          <button className="checkout">
+            <Link to='/checkout'>Checkout</Link>
+
+           
+          </button>
         </div>
       </div>
     </div>
@@ -84,6 +100,10 @@ const Cont = styled.div`
           padding: 10px 20px;
           color: #fff;
           border-radius: 4px;
+
+          a {
+            color: #fff;
+          }
 
           &.empty {
             background: red;

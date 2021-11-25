@@ -11,10 +11,9 @@ ReactDOM.render(
     <Router>
       <ToastProvider>
         <AuthContextProvider>
-        <App />
-      </AuthContextProvider>
+          <App />
+        </AuthContextProvider>
       </ToastProvider>
-      
     </Router>
   </React.StrictMode>,
   document.getElementById("root")
